@@ -33,11 +33,51 @@ Traceroute an IP address.
 python ip2trace.py -p 8.8.8.8 -d /usr/share/ip2location/DB3.BIN
 ```
 
+Example output:
+
+```bash
+IP2Location Geolocation Traceroute (ip2trace) Version 8.0.0
+Copyright (c) 2021 IP2Location.com [MIT License]
+https://www.ip2location.com/free/traceroute-application
+
+
+ 1  37.123.114.1  0.3853ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
+ 2  10.10.32.132  0.4084ms ["-","-","-","-"]
+ 3  10.10.32.17  0.2673ms ["-","-","-","-"]
+ 4  212.78.92.2  0.5546ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
+ 5  98.158.181.98  1.8706ms ["US","United States of America","New York","New York City"]
+ 6  195.66.236.125  0.5715ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
+ 7  108.170.246.129  0.5193ms ["US","United States of America","California","Mountain View"]
+ 8  108.170.232.97  0.4749ms ["US","United States of America","California","Mountain View"]
+ 9  8.8.8.8  0.5693ms ["US","United States of America","California","Mountain View"]
+```
+
 Traceroute by hostname
 
 ```bash
 python ip2trace.py -p google.com -d /usr/share/ip2location/DB3.BIN
 ```
+
+Example output:
+
+```bash
+IP2Location Geolocation Traceroute (ip2trace) Version 8.0.0
+Copyright (c) 2021 IP2Location.com [MIT License]
+https://www.ip2location.com/free/traceroute-application
+
+
+ 1  37.123.114.1  0.3529ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
+ 2  10.10.32.131  0.3686ms ["-","-","-","-"]
+ 3  10.10.32.17  0.2663ms ["-","-","-","-"]
+ 4  212.78.92.2  19.7358ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
+ 5  98.158.181.98  9.2373ms ["US","United States of America","New York","New York City"]
+ 6  195.66.236.125  0.5388ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
+ 7  108.170.246.161  1.6131ms ["US","United States of America","California","Mountain View"]
+ 8  172.253.65.211  1.2376ms ["US","United States of America","California","Mountain View"]
+ 9  216.58.213.14  0.5167ms ["US","United States of America","California","Mountain View"]
+```
+
+
 
 ## Download IP2Location Databases
 

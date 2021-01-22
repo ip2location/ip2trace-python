@@ -1,6 +1,6 @@
 # IP2Trace Python
 
-IP2Trace Python is a Python tool allowing user to get IP address information such as country, region, city, latitude, longitude, zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, usage type from traceroute probes IP address.
+IP2Trace Python is a ready-to-use Python tool allowing users to display the geolocation information, such as country, region, city, latitude, longitude, zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, usage type in the IP traceroute results. It supports both IPv4 and IPv6 traceroute.
 
 *Note: This tool requires Python 3.5 or later.*
 
@@ -92,5 +92,5 @@ wget "https://www.ip2location.com/download?token={DOWNLOAD_TOKEN}&file={DATABASE
 
 ## Support
 
-Email: [support@ip2location.com](mailto:support@ip2location.com)
+Email: [support@ip2location.com](mailto:support@ip2location.com)   
 URL: [https://www.ip2location.com](https://www.ip2location.com/)

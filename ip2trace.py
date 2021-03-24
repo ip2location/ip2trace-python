@@ -1,3 +1,4 @@
+from __future__ import print_function
 import socket
 import struct
 import os
@@ -239,7 +240,7 @@ class Traceroute:
             b'abcdefghijklmnopqrstuvwxyz'
             b'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
             b'1234567890', k=size)
-        return bytes(sequence)
+        return bytearray(sequence)
 
     def send_icmp_echo(self, icmp_socket):
         if is_ipv4(self.destination_ip) == 4:
@@ -250,7 +251,7 @@ class Traceroute:
         payload = []
         for i in range(start_value, start_value+self.packet_size):
             payload.append(i & 0xff)
-        data = bytes(payload)
+        data = bytearray(payload)
         checksum = calculate_checksum(header + data)
         if is_ipv4(self.destination_ip) == 4:
             header = struct.pack("!BBHHH", ICMP_ECHO, 0, checksum, self.identifier, self.seq_no)
@@ -282,7 +283,8 @@ class Traceroute:
             ip_header = self.header_to_dict(ip_keys, packet_data[:20], "!BBHHHBBHII")
             return receive_time, icmp_header, ip_header
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+def main():
     is_help = False
     for index, arg in enumerate(sys.argv):
         if arg in ['--help', '-h', '-?']:

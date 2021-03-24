@@ -1,13 +1,19 @@
 # IP2Trace Python
 
-IP2Trace Python is a ready-to-use Python tool allowing users to display the geolocation information, such as country, region, city, latitude, longitude, zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, usage type in the IP traceroute results. It supports both IPv4 and IPv6 traceroute.
+IP2Trace Python is a Python tool allowing user to get IP address information such as country, region, city, latitude, longitude, zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, usage type from traceroute probes IP address.
 
-*Note: This tool requires Python 3.5 or later.*
+*Note: This tool requires Python 2.7, or Python 3.5 or later.*
+
+## Installation
+
+You can install this tool by using pip. Just type `pip install IP2Trace` in your console and IP2Trace will be installed in your machine.
+
+*Note: This tool require [IP2Location](https://github.com/chrislim2888/IP2Location-Python) library to work with. If pip did not install the dependency for you, you can manually install it by using `pip install IP2Location`.*
 
 ## Usage
 
 ```
-python ip2trace.py -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
+ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
 
   -d, --database
   Specify the path of IP2Location BIN database file.
@@ -30,7 +36,7 @@ python ip2trace.py -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTI
 Traceroute an IP address.
 
 ```bash
-python ip2trace.py -p 8.8.8.8 -d /usr/share/ip2location/DB3.BIN
+ip2trace -p 8.8.8.8 -d /usr/share/ip2location/DB3.BIN
 ```
 
 Example output:
@@ -55,7 +61,7 @@ https://www.ip2location.com/free/traceroute-application
 Traceroute by hostname
 
 ```bash
-python ip2trace.py -p google.com -d /usr/share/ip2location/DB3.BIN
+ip2trace -p google.com -d /usr/share/ip2location/DB3.BIN
 ```
 
 Example output:
@@ -92,5 +98,5 @@ wget "https://www.ip2location.com/download?token={DOWNLOAD_TOKEN}&file={DATABASE
 
 ## Support
 
-Email: [support@ip2location.com](mailto:support@ip2location.com)   
+Email: [support@ip2location.com](mailto:support@ip2location.com)
 URL: [https://www.ip2location.com](https://www.ip2location.com/)

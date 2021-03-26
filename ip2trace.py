@@ -95,7 +95,7 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 8.0.0\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 2.1.1\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
@@ -118,17 +118,29 @@ class Traceroute:
         self.timeout = 1000
         self.ttl = 1
 
+        if (destination_server is None):
+            print ("Missing IP address or hostname.")
+            sys.exit()
+
         try:
             self.destination_ip = to_ip(destination_server)
         except socket.gaierror:
             self.print_unknownhost()
+            sys.exit()
 
         # Open up IP2Location BIN file
         if (database is not None):
-            self.obj = IP2Location.IP2Location(database)
+            if os.path.isfile(database) == False:
+                print("BIN database file not found.")
+                sys.exit()
+            else:
+                self.obj = IP2Location.IP2Location(database)
+        else:
+            print("You must used IP2Location BIN database along with this tool. You can download free database at https://lite.ip2location.com.")
+            sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 8.0.0\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.1\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
 
@@ -286,17 +298,20 @@ class Traceroute:
 # if __name__ == '__main__':
 def main():
     is_help = False
-    for index, arg in enumerate(sys.argv):
-        if arg in ['--help', '-h', '-?']:
-            print_usage()
-            is_help = True
-        elif arg in ['--version', '-v']:
-            print_version()
-            is_help = True
-    if is_help is False:
-        parser = create_parser()
-        args = parser.parse_args(sys.argv[1:])
-        destination_server = args.ip
-        database = args.database
-        max_hops = args.ttl
-        traceroute(destination_server, database, max_hops)
+    if len(sys.argv) >= 2:
+        for index, arg in enumerate(sys.argv):
+            if arg in ['--help', '-h', '-?']:
+                print_usage()
+                is_help = True
+            elif arg in ['--version', '-v']:
+                print_version()
+                is_help = True
+        if is_help is False:
+            parser = create_parser()
+            args = parser.parse_args(sys.argv[1:])
+            destination_server = args.ip
+            database = args.database
+            max_hops = args.ttl
+            traceroute(destination_server, database, max_hops)
+    else:
+        print("Missing parameters. Please refer to documentation for the available parameters.")

@@ -42,13 +42,13 @@ Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS
 Traceroute an IP address.
 
 ```bash
-ip2trace -p 8.8.8.8 -d /usr/share/ip2location/DB3.BIN
+ip2trace 8.8.8.8 -d /usr/share/ip2location/DB3.BIN
 ```
 
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 2.1.3
+IP2Location Geolocation Traceroute (ip2trace) Version 2.1.4
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
@@ -67,13 +67,13 @@ https://www.ip2location.com/free/traceroute-application
 Traceroute by hostname
 
 ```bash
-ip2trace -p google.com -d /usr/share/ip2location/DB3.BIN
+ip2trace google.com -d /usr/share/ip2location/DB3.BIN
 ```
 
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 2.1.3
+IP2Location Geolocation Traceroute (ip2trace) Version 2.1.4
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 

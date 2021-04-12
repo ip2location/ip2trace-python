@@ -124,7 +124,7 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 2.2.0\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 2.1.4\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
@@ -197,7 +197,7 @@ class Traceroute:
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.3\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.4\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
 

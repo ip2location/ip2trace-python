@@ -13,19 +13,25 @@ You can install this tool by using pip. Just type `pip install IP2Trace` in your
 ## Usage
 
 ```
-ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
-
-  -d, --database
-  Specify the path of IP2Location BIN database file.
-
-  -h, -?, --help
-  Display this guide.
+Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
+   or: ip2trace [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
 
   -p, --ip
   Specify an IP address or hostname.
+  The -p/--ip can be omitted if the IP address or hostname is defined in the first parameter.
+
+  -d, --database
+  Specify the path of IP2Location BIN database file. You can download the latest free IP2Location BIN database from https://lite.ip2location.com.
 
   -t, --ttl
-  Set the maxinum TTL for each probe.
+  Set the max number of hops. (Default: 30)
+
+  -o, --output
+  Set the desired IP2Location BIN database columns to output with.
+  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type.
+
+  -h, -?, --help
+  Display this guide.
 
   -v, --version
   Print the version of the IP2Location version.
@@ -42,7 +48,7 @@ ip2trace -p 8.8.8.8 -d /usr/share/ip2location/DB3.BIN
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 8.0.0
+IP2Location Geolocation Traceroute (ip2trace) Version 2.1.3
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
@@ -67,7 +73,7 @@ ip2trace -p google.com -d /usr/share/ip2location/DB3.BIN
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 8.0.0
+IP2Location Geolocation Traceroute (ip2trace) Version 2.1.3
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 

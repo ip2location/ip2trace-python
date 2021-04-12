@@ -2,12 +2,14 @@ from __future__ import print_function
 import socket
 import struct
 import os
+import platform
 import time
 import sys
 import select
 import argparse
 import IP2Location
 from re import match
+from shutil import copyfile
 
 ICMP_ECHO = 8
 ICMP_V6_ECHO = 128
@@ -17,6 +19,24 @@ ICMP_TIME_EXCEEDED = 11
 MIN_SLEEP = 1000
 
 ip2location_result_fields = ['country_short', 'country_long', 'region', 'city', 'isp', 'latitude', 'longitude', 'domain', 'zipcode', 'timezone', 'netspeed', 'idd_code', 'area_code', 'weather_code', 'weather_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', ]
+ip2location_outputs_reference = ['country_code', 'country_name', 'region_name', 'city_name', 'isp', 'latitude', 'longitude', 'domain', 'zip_code', 'time_zone', 'net_speed', 'idd_code', 'area_code', 'weather_station_code', 'weather_station_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', ]
+
+# Define BIN database default path
+if platform.system() == 'Windows':
+    default_path = os.path.expanduser('~') + os.sep + "Documents" + os.sep
+# elif platform.system() === 'Linux ':
+else:
+    default_path = '/usr/share/ip2location/'
+
+# Now we copy the BIN database to default_path here instead of doing it duing installation as pip kept copied to wrong location.
+if (os.path.isfile(default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN") == False):
+    try:
+        # create the dir is not exist
+        if (os.path.exists(default_path) is False):
+            os.mkdir(default_path)
+        copyfile(os.path.dirname(os.path.realpath(__file__)) + os.sep + "data" + os.sep + "IP2LOCATION-LITE-DB1.IPV6.BIN", default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN")
+    except PermissionError as e:
+        sys.exit("Root permission is required. Please rerun it as 'sudo ip2trace'.")
 
 if sys.platform.startswith('win32'):
     timer = time.clock
@@ -68,46 +88,56 @@ def to_ip(hostname):
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--ip', metavar='Specify an IP address or hostname.')
+    # parser.add_argument('-p', '--ip', metavar='Specify an IP address or hostname.')
+    gp = parser.add_mutually_exclusive_group()
+    gp.add_argument('-p', '--ip', metavar='Specify an IP address or hostname.')
+    gp.add_argument('hostname', nargs='?', metavar='Specify an IP address or hostname.')
     parser.add_argument('-d', '--database', metavar='Specify the path of IP2Location BIN database file.')
     parser.add_argument('-t', '--ttl', default=30, type=int, metavar='Set the max number of hops. (Default: 30)')
+    parser.add_argument('-o', '--output', metavar='Specify the result columns to be output.', nargs='+')
 
     return parser
 
 def print_usage():
     print(
-"Usage:\n"
-"  ip2trace.py -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n\n"
-"  -d, --database\n"
-"  Specify the path of IP2Location BIN database file.\n"
-"\n"
-"  -h, -?, --help\n"
-"  Display this guide.\n"
-"\n"
+"Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n"
+"   or: ip2trace [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n\n"
 "  -p, --ip\n"
 "  Specify an IP address or hostname.\n"
+"  The -p/--ip can be omitted if the IP address or hostname is defined in the first parameter.\n"
+"\n"
+"  -d, --database\n"
+"  Specify the path of IP2Location BIN database file. You can download the latest free IP2Location BIN database from https://lite.ip2location.com.\n"
 "\n"
 "  -t, --ttl\n"
 "  Set the max number of hops. (Default: 30)\n"
+"\n"
+"  -o, --output\n"
+"  Set the desired IP2Location BIN database columns to output with.\n"
+"  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type.\n"
+"\n"
+"  -h, -?, --help\n"
+"  Display this guide.\n"
 "\n"
 "  -v, --version\n"
 "  Print the version of the IP2Location version.\n")
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 2.1.1\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 2.2.0\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
-def traceroute(destination_server, database, ttl):
-    t = Traceroute(destination_server, database, ttl)
+def traceroute(destination_server, database, ttl, output):
+    t = Traceroute(destination_server, database, ttl, output)
     t.start_traceroute()
 
 class Traceroute:
-    def __init__(self, destination_server, database, max_hops):
+    def __init__(self, destination_server, database, max_hops, output):
         self.destination_server = destination_server
         self.database = database
         self.max_hops = max_hops
+        self.output = output
         self.identifier = os.getpid() & 0xffff
         self.seq_no = 0
         self.delays = []
@@ -131,16 +161,43 @@ class Traceroute:
         # Open up IP2Location BIN file
         if (database is not None):
             if os.path.isfile(database) == False:
-                print("BIN database file not found.")
-                sys.exit()
+                # Now will check if the filename passed is a BIN extension or not
+                if database.upper().endswith(".BIN"):
+                    # check if the given filename is under current dir or not.
+                    if (os.getcwd().endswith(os.sep)):
+                        filepath = os.getcwd() + database
+                    else:
+                        filepath = os.getcwd() + os.sep + database
+                    print(filepath)
+                    if os.path.isfile(filepath) == False:
+                        if os.path.isfile(default_path + database) == False:
+                            print("BIN database file not found.")
+                            sys.exit()
+                        else:
+                            self.obj = IP2Location.IP2Location(default_path + database)
+                    else:
+                        self.obj = IP2Location.IP2Location(filepath)
+                else:
+                    print("Only BIN database is accepted. You can download the latest free IP2Location BIN database from https://lite.ip2location.com.")
+                    sys.exit()
             else:
                 self.obj = IP2Location.IP2Location(database)
         else:
-            print("You must used IP2Location BIN database along with this tool. You can download free database at https://lite.ip2location.com.")
-            sys.exit()
+            if (os.path.isfile(default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN") != False):
+                self.obj = IP2Location.IP2Location(default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN")
+            else:
+                print("Missing IP2Location BIN database. Please enter ‘ip2trace -h’ for more information.")
+                sys.exit()
+
+        # check the output list
+        if (self.output is not None):
+            for i in self.output:
+                if i not in ip2location_outputs_reference:
+                    print("The column name is invalid. Please get a list of valid column names at https://ip2location.com/database/db24-ip-country-region-city-latitude-longitude-zipcode-timezone-isp-domain-netspeed-areacode-weather-mobile-elevation-usagetype.")
+                    sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.1\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.3\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
 
@@ -181,9 +238,14 @@ class Traceroute:
                 record_dict = {}
                 for attr, value in record.__dict__.items():
                     record_dict[attr] = value
-                for i in range(0,len(ip2location_result_fields)):
-                    if (ip2location_result_fields[i] in record_dict) and (record_dict[ip2location_result_fields[i]] is not None):
-                        display_result = display_result + '"' + str(record_dict[ip2location_result_fields[i]]) + '",'
+                if (self.output is not None):
+                    for i in self.output:
+                        if (i in ip2location_outputs_reference) and (ip2location_result_fields[ip2location_outputs_reference.index(i)] in record_dict) and (record_dict[ip2location_result_fields[ip2location_outputs_reference.index(i)]] is not None):
+                            display_result = display_result + '"' + str(record_dict[ip2location_result_fields[ip2location_outputs_reference.index(i)]]) + '",'
+                else:
+                    for i in range(0,len(ip2location_result_fields)):
+                        if (ip2location_result_fields[i] in record_dict) and (record_dict[ip2location_result_fields[i]] is not None):
+                            display_result = display_result + '"' + str(record_dict[ip2location_result_fields[i]]) + '",'
                 if display_result.endswith(','):
                     display_result = display_result[:-1]
                 display_result = display_result + ']'
@@ -309,9 +371,14 @@ def main():
         if is_help is False:
             parser = create_parser()
             args = parser.parse_args(sys.argv[1:])
-            destination_server = args.ip
+            # destination_server = args.ip
+            if args.ip is not None:
+                destination_server = args.ip
+            else:
+                destination_server = args.hostname
             database = args.database
             max_hops = args.ttl
-            traceroute(destination_server, database, max_hops)
+            output = args.output
+            traceroute(destination_server, database, max_hops, output)
     else:
-        print("Missing parameters. Please refer to documentation for the available parameters.")
+        print("Missing parameters. Please enter 'ip2trace -h' for more information.")

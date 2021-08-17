@@ -96,10 +96,15 @@ https://www.ip2location.com/free/traceroute-application
 - Download free IP2Location LITE databases at [https://lite.ip2location.com](https://lite.ip2location.com/)
 - For more accurate commercial database, please refer to [https://www.ip2location.com](https://www.ip2location.com/)
 
-One you have obtained your download token, you can download the the database using **wget** as below:
+Once you have obtained your download token, you can download the the database using **wget** as below:
 
 ```
-wget "https://www.ip2location.com/download?token={DOWNLOAD_TOKEN}&file={DATABASE_CODE}"
+wget "https://www.ip2location.com/download?token={DOWNLOAD_TOKEN}&file={DATABASE_CODE}" -O ip2location.zip
+```
+
+Unzip the file to retrieve the BIN database for lookup
+```
+unzip ip2location.zip
 ```
 
 ## Support

@@ -6,7 +6,7 @@ IP2Trace Python is a Python tool allowing user to get IP address information suc
 
 ## Installation
 
-You can install this tool by using pip. Just type `pip install IP2Trace` in your console and IP2Trace will be installed in your machine.
+You can install this tool by using pip in Windows or Linux. To install this tool in Windows and Linux, just type `pip install IP2Trace` in your console and IP2Trace will be installed in your machine.
 
 *Note: This tool require [IP2Location](https://github.com/chrislim2888/IP2Location-Python) library to work with. If pip did not install the dependency for you, you can manually install it by using `pip install IP2Location`.*
 
@@ -29,6 +29,9 @@ Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS
   -o, --output
   Set the desired IP2Location BIN database columns to output with.
   Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type.
+  
+  -a, --all
+  Print all the column(s) available based on the BIN file used.
 
   -h, -?, --help
   Display this guide.
@@ -42,16 +45,17 @@ Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS
 Traceroute an IP address.
 
 ```bash
-ip2trace 8.8.8.8 -d /usr/share/ip2location/DB3.BIN
+ip2trace 8.8.8.8 -d /usr/share/ip2location/DB3.BIN -a
 ```
 
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 2.1.4
+IP2Location Geolocation Traceroute (ip2trace) Version 2.1.6
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
+Traceroute to dns.google ( 8.8.8.8 )
 
  1  37.123.114.1  0.3853ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
  2  10.10.32.132  0.4084ms ["-","-","-","-"]
@@ -67,16 +71,17 @@ https://www.ip2location.com/free/traceroute-application
 Traceroute by hostname
 
 ```bash
-ip2trace google.com -d /usr/share/ip2location/DB3.BIN
+ip2trace google.com -d /usr/share/ip2location/DB3.BIN -a
 ```
 
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 2.1.4
+IP2Location Geolocation Traceroute (ip2trace) Version 2.1.6
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
+Traceroute to dns.google ( 8.8.8.8 )
 
  1  37.123.114.1  0.3529ms ["GB","United Kingdom of Great Britain and Northern Ireland","England","London"]
  2  10.10.32.131  0.3686ms ["-","-","-","-"]
@@ -96,15 +101,10 @@ https://www.ip2location.com/free/traceroute-application
 - Download free IP2Location LITE databases at [https://lite.ip2location.com](https://lite.ip2location.com/)
 - For more accurate commercial database, please refer to [https://www.ip2location.com](https://www.ip2location.com/)
 
-Once you have obtained your download token, you can download the the database using **wget** as below:
+One you have obtained your download token, you can download the the database using **wget** as below:
 
-```
-wget "https://www.ip2location.com/download?token={DOWNLOAD_TOKEN}&file={DATABASE_CODE}" -O ip2location.zip
-```
-
-Unzip the file to retrieve the BIN database for lookup
-```
-unzip ip2location.zip
+```bash
+wget "https://www.ip2location.com/download?token={DOWNLOAD_TOKEN}&file={DATABASE_CODE}"
 ```
 
 ## Support

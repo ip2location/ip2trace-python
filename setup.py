@@ -6,7 +6,7 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name="IP2Trace",
-    version="2.1.5",
+    version="2.1.6",
     description="A Python tool to display geolocation information in the traceroute.",
     long_description_content_type="text/markdown",
     long_description=long_description,

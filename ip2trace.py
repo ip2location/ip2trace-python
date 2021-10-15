@@ -140,7 +140,7 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 2.1.5\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 2.1.7\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
@@ -215,10 +215,9 @@ class Traceroute:
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.6\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.7\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
-# "Traceroute to {}\({}\)\n\n".format(self.destination_domain_name, self.destination_ip))
 # "Traceroute to", self.destination_domain_name, "(", self.destination_ip, ")\n\n")
 # "Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n")
         print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
@@ -386,7 +385,9 @@ class Traceroute:
                 delay = (receive_time - sent_time) * 1000.0
                 # print(delay)
                 delays.append(delay)
-            time.sleep(1)
+            # time.sleep(0.1)
+            # time.sleep(0.01)
+            time.sleep(0.005)
         # if len(delays) > 0:
         if len(delays) > 0 and ip_header is not None:
             self.print_trace(delays, ip_header)

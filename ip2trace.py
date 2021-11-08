@@ -42,12 +42,17 @@ if (os.path.isfile(default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN") == False):
             os.mkdir(default_path)
         copyfile(os.path.dirname(os.path.realpath(__file__)) + os.sep + "data" + os.sep + "IP2LOCATION-LITE-DB1.IPV6.BIN", default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN")
     except PermissionError as e:
-        sys.exit("Root permission is required. Please rerun it as 'sudo ip2trace'.")
+        sys.exit("Root permission is required. Please rerun it as 'sudo ip2tracepy' in Linux, or obtain administrator permission in Windows.")
 
 if sys.platform.startswith('win32'):
-    timer = time.clock
+    # timer = time.clock
+    if sys.version_info > (3,2):
+        timer = time.perf_counter
+    else:
+        timer = time.clock
 else:
     timer = time.time
+# timer = time.time
 
 def calculate_checksum(packet):
     countTo = (len(packet) // 2) * 2
@@ -94,8 +99,14 @@ def to_ip(hostname):
 
 def ip_to_domain_name(hostname):
     if is_valid_ip(hostname):
-        return socket.gethostbyaddr(hostname)
-    return hostname
+        # return socket.gethostbyaddr(hostname)
+        try:
+            return socket.gethostbyaddr(hostname)
+        except socket.herror:
+            # return hostname
+            return None
+    # return hostname
+    return None
 
 
 def create_parser():
@@ -113,8 +124,8 @@ def create_parser():
 
 def print_usage():
     print(
-"Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n"
-"   or: ip2trace [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n\n"
+"Usage: ip2tracepy -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n"
+"   or: ip2tracepy [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n\n"
 "  -p, --ip\n"
 "  Specify an IP address or hostname.\n"
 "  The -p/--ip can be omitted if the IP address or hostname is defined in the first parameter.\n"
@@ -140,7 +151,7 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 2.1.7\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 3.0.0\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
@@ -204,7 +215,7 @@ class Traceroute:
             if (os.path.isfile(default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN") != False):
                 self.obj = IP2Location.IP2Location(default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN")
             else:
-                print("Missing IP2Location BIN database. Please enter ‘ip2trace -h’ for more information.")
+                print("Missing IP2Location BIN database. Please enter 'ip2trace -h' for more information.")
                 sys.exit()
 
         # check the output list
@@ -215,12 +226,14 @@ class Traceroute:
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 2.1.7\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.0.0\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
-# "Traceroute to", self.destination_domain_name, "(", self.destination_ip, ")\n\n")
-# "Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n")
-        print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
+        # print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
+        if self.destination_domain_name is not None:
+            print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
+        else:
+            print("Traceroute to", self.destination_ip, "\n\n", end="")
 
     def print_unknownhost(self):
         print("traceroute: unknown host {}".format(self.destination_server))

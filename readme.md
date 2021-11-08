@@ -13,8 +13,8 @@ You can install this tool by using pip in Windows or Linux. To install this tool
 ## Usage
 
 ```
-Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
-   or: ip2trace [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
+Usage: ip2tracepy -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
+   or: ip2tracepy [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]
 
   -p, --ip
   Specify an IP address or hostname.
@@ -45,7 +45,7 @@ Usage: ip2trace -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIONS
 Traceroute an IP address.
 
 ```bash
-ip2trace 8.8.8.8 -d /usr/share/ip2location/DB3.BIN -a
+ip2tracepy 8.8.8.8 -d /usr/share/ip2location/DB3.BIN -a
 ```
 
 Example output:
@@ -71,7 +71,7 @@ Traceroute to dns.google ( 8.8.8.8 )
 Traceroute by hostname
 
 ```bash
-ip2trace google.com -d /usr/share/ip2location/DB3.BIN -a
+ip2tracepy google.com -d /usr/share/ip2location/DB3.BIN -a
 ```
 
 Example output:

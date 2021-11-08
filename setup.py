@@ -6,13 +6,13 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name="IP2Trace",
-    version="2.1.7",
+    version="3.0.0",
     description="A Python tool to display geolocation information in the traceroute.",
     long_description_content_type="text/markdown",
     long_description=long_description,
     entry_points={
         'console_scripts': [
-            'ip2trace=ip2trace:main'
+            'ip2tracepy=ip2trace:main'
         ]
     },
     py_modules=['ip2trace'],

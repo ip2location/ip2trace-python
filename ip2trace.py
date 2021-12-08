@@ -132,13 +132,14 @@ def print_usage():
 "\n"
 "  -d, --database\n"
 "  Specify the path of IP2Location BIN database file. You can download the latest free IP2Location BIN database from https://lite.ip2location.com.\n"
+"  If the database filename is specified but without the path, ip2tracepy will search the database file in /usr/share/ip2location/ for Linux or C:\Users\(your_Windows_username)\Documents\ for Windows.\n"
 "\n"
 "  -t, --ttl\n"
 "  Set the max number of hops. (Default: 30)\n"
 "\n"
 "  -o, --output\n"
 "  Set the desired IP2Location BIN database columns to output with.\n"
-"  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type.\n"
+"  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type, address_type, category.\n"
 "\n"
 "  -a, --all\n"
 "Print all the column(s) available based on the BIN file used.\n"
@@ -151,7 +152,7 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 3.0.0\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.0\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
@@ -226,7 +227,7 @@ class Traceroute:
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.0.0\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.0\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
         # print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
@@ -294,7 +295,7 @@ class Traceroute:
                 for attr, value in record.__dict__.items():
                     record_dict[attr] = value
                 # print(record_dict["region"])
-                if (self.output is True):
+                if (self.output is not None):
                     for i in self.output:
                         if (i in ip2location_outputs_reference) and (ip2location_result_fields[ip2location_outputs_reference.index(i)] in record_dict) and (record_dict[ip2location_result_fields[ip2location_outputs_reference.index(i)]] is not None):
                             display_result = display_result + '"' + str(record_dict[ip2location_result_fields[ip2location_outputs_reference.index(i)]]) + '",'

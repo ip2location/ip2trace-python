@@ -22,13 +22,14 @@ Usage: ip2tracepy -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIO
 
   -d, --database
   Specify the path of IP2Location BIN database file. You can download the latest free IP2Location BIN database from https://lite.ip2location.com.
+  If the database filename is specified but without the path, ip2tracepy will search the database file in /usr/share/ip2location/ for Linux or C:\Users\(your_Windows_username)\Documents\ for Windows.
 
   -t, --ttl
   Set the max number of hops. (Default: 30)
 
   -o, --output
   Set the desired IP2Location BIN database columns to output with.
-  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type.
+  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type, address_type, category.
   
   -a, --all
   Print all the column(s) available based on the BIN file used.
@@ -51,7 +52,7 @@ ip2tracepy 8.8.8.8 -d /usr/share/ip2location/DB3.BIN -a
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 2.1.6
+IP2Location Geolocation Traceroute (ip2trace) Version 3.1.0
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
@@ -77,7 +78,7 @@ ip2tracepy google.com -d /usr/share/ip2location/DB3.BIN -a
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 2.1.6
+IP2Location Geolocation Traceroute (ip2trace) Version 3.1.0
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 

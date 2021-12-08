@@ -132,7 +132,7 @@ def print_usage():
 "\n"
 "  -d, --database\n"
 "  Specify the path of IP2Location BIN database file. You can download the latest free IP2Location BIN database from https://lite.ip2location.com.\n"
-"  If the database filename is specified but without the path, ip2tracepy will search the database file in /usr/share/ip2location/ for Linux or C:\Users\(your_Windows_username)\Documents\ for Windows.\n"
+"  If the database filename is specified but without the path, ip2tracepy will search the database file in /usr/share/ip2location/ for Linux or C:\\Users\\(your_Windows_username)\\Documents\\ for Windows.\n"
 "\n"
 "  -t, --ttl\n"
 "  Set the max number of hops. (Default: 30)\n"
@@ -152,7 +152,7 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.0\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.1\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
@@ -227,7 +227,7 @@ class Traceroute:
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.0\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.1\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
         # print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")

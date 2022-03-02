@@ -31,8 +31,10 @@ ip2location_outputs_reference = ['country_code', 'country_name', 'region_name', 
 if platform.system() == 'Windows':
     default_path = os.path.expanduser('~') + os.sep + "Documents" + os.sep
 # elif platform.system() === 'Linux ':
+# elif platform.system() == 'Darwin':
 else:
-    default_path = '/usr/share/ip2location/'
+    default_path = '/usr/local/share/ip2location/'
+    # default_path = '/usr/share/ip2location/'
 
 # Now we copy the BIN database to default_path here instead of doing it duing installation as pip kept copied to wrong location.
 if (os.path.isfile(default_path + "IP2LOCATION-LITE-DB1.IPV6.BIN") == False):
@@ -152,7 +154,7 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.1\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
@@ -227,7 +229,7 @@ class Traceroute:
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.1\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2\n"
 "Copyright (c) 2021 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
         # print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")

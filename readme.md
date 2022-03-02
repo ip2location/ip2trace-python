@@ -22,7 +22,7 @@ Usage: ip2tracepy -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIO
 
   -d, --database
   Specify the path of IP2Location BIN database file. You can download the latest free IP2Location BIN database from https://lite.ip2location.com.
-  If the database filename is specified but without the path, ip2tracepy will search the database file in /usr/share/ip2location/ for Linux or C:\Users\(your_Windows_username)\Documents\ for Windows.
+  If the database filename is specified but without the path, ip2tracepy will search the database file in /usr/local/share/ip2location/ for Linux or C:\Users\(your_Windows_username)\Documents\ for Windows.
 
   -t, --ttl
   Set the max number of hops. (Default: 30)
@@ -46,13 +46,13 @@ Usage: ip2tracepy -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIO
 Traceroute an IP address.
 
 ```bash
-ip2tracepy 8.8.8.8 -d /usr/share/ip2location/DB3.BIN -a
+ip2tracepy 8.8.8.8 -d /usr/local/share/ip2location/DB3.BIN -a
 ```
 
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 3.1.1
+IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
@@ -72,13 +72,13 @@ Traceroute to dns.google ( 8.8.8.8 )
 Traceroute by hostname
 
 ```bash
-ip2tracepy google.com -d /usr/share/ip2location/DB3.BIN -a
+ip2tracepy google.com -d /usr/local/share/ip2location/DB3.BIN -a
 ```
 
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 3.1.1
+IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 

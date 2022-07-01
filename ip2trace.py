@@ -257,8 +257,8 @@ class Traceroute:
     # def print_trace(self, delay, ip_header):
     def print_trace(self, delays, ip_header):
         total_delays = 0
-        # ip = socket.inet_ntoa(struct.pack('!I', ip_header['Source_IP']))
-        ip = socket.inet_ntoa(struct.pack('!I', ip_header['Destination_IP']))
+        ip = socket.inet_ntoa(struct.pack('!I', ip_header['Source_IP']))
+        # ip = socket.inet_ntoa(struct.pack('!I', ip_header['Destination_IP']))
         # print(ip_header['Source_IP'])
         try:
             sender_hostname = socket.gethostbyaddr(ip)[0]

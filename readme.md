@@ -52,7 +52,7 @@ ip2tracepy 8.8.8.8 -d /usr/local/share/ip2location/DB3.BIN -a
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2
+IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
@@ -78,7 +78,7 @@ ip2tracepy google.com -d /usr/local/share/ip2location/DB3.BIN -a
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2
+IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3
 Copyright (c) 2021 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 

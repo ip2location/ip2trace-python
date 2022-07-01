@@ -8,6 +8,7 @@ import sys
 import select
 import argparse
 import IP2Location
+from random import choices
 from re import match
 from shutil import copyfile
 
@@ -16,13 +17,6 @@ ICMP_V6_ECHO = 128
 ICMP_ECHO_REPLY = 0
 ICMP_V6_ECHO_REPLY = 129
 ICMP_TIME_EXCEEDED = 11
-# MIN_SLEEP = 1000
-
-# Windows IPv6 compatibility
-# if PLATFORM_WINDOWS:
-# if platform.system() == 'Windows':
-    # socket.IPPROTO_IPV6 = 41
-    # socket.IPPROTO_ICMPV6 = 58
 
 ip2location_result_fields = ['country_short', 'country_long', 'region', 'city', 'isp', 'latitude', 'longitude', 'domain', 'zipcode', 'timezone', 'netspeed', 'idd_code', 'area_code', 'weather_code', 'weather_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', ]
 ip2location_outputs_reference = ['country_code', 'country_name', 'region_name', 'city_name', 'isp', 'latitude', 'longitude', 'domain', 'zip_code', 'time_zone', 'net_speed', 'idd_code', 'area_code', 'weather_station_code', 'weather_station_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', ]
@@ -176,6 +170,7 @@ class Traceroute:
         self.delays = []
         self.prev_sender_hostname = ""
         self.all = all
+        self.family = None
 
         self.count_of_packets = 1
         self.packet_size = 80
@@ -258,8 +253,6 @@ class Traceroute:
     def print_trace(self, delays, ip_header):
         total_delays = 0
         ip = socket.inet_ntoa(struct.pack('!I', ip_header['Source_IP']))
-        # ip = socket.inet_ntoa(struct.pack('!I', ip_header['Destination_IP']))
-        # print(ip_header['Source_IP'])
         try:
             sender_hostname = socket.gethostbyaddr(ip)[0]
         except socket.herror:
@@ -358,11 +351,15 @@ class Traceroute:
         for i in range (0, 3):
             try:
                 if is_ipv4(self.destination_ip) == 4:
+                    self.family = socket.AF_INET
                     icmp_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
                     icmp_socket.setsockopt(socket.IPPROTO_IP, socket.IP_TTL, self.ttl)
                 elif is_ipv6(self.destination_ip) == 6:
+                    self.family = socket.AF_INET6
                     icmp_socket = socket.socket(socket.AF_INET6, socket.SOCK_RAW, socket.IPPROTO_ICMPV6)
                     icmp_socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_UNICAST_HOPS, self.ttl)
+                    if platform.system() == 'Linux':
+                        icmp_socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_TCLASS, 0)
             except socket.error as err:
                 if err.errno == 1:
                     print("Operation not permitted: ICMP messages can only be sent from a process running as root")
@@ -395,24 +392,30 @@ class Traceroute:
         return bytearray(sequence)
 
     def send_icmp_echo(self, icmp_socket):
-        if is_ipv4(self.destination_ip) == 4:
-            header = struct.pack("!BBHHH", ICMP_ECHO, 0, 0, self.identifier, self.seq_no)
-        elif is_ipv6(self.destination_ip) == 6:
-            header = struct.pack("!BBHHH", ICMP_V6_ECHO, 0, 0, self.identifier, self.seq_no)
         start_value = 65
         payload = []
-        for i in range(start_value, start_value+self.packet_size):
-            payload.append(i & 0xff)
-        data = bytearray(payload)
+        if is_ipv4(self.destination_ip) == 4:
+            header = struct.pack("!BBHHH", ICMP_ECHO, 0, 0, self.identifier, self.seq_no)
+            # header = struct.pack("!2B3H", ICMP_ECHO, 0, 0, self.identifier, self.seq_no)
+            for i in range(start_value, start_value+self.packet_size):
+                payload.append(i & 0xff)
+            data = bytearray(payload)
+        elif is_ipv6(self.destination_ip) == 6:
+            header = struct.pack("!BBHHH", ICMP_V6_ECHO, 0, 0, self.identifier, self.seq_no)
+            # header = struct.pack("!2B3H", ICMP_V6_ECHO, 0, 0, self.identifier, self.seq_no)
+            data = self.random_byte_message(56)
         checksum = calculate_checksum(header + data)
         if is_ipv4(self.destination_ip) == 4:
             header = struct.pack("!BBHHH", ICMP_ECHO, 0, checksum, self.identifier, self.seq_no)
+            # header = struct.pack("!2B3H", ICMP_ECHO, 0, checksum, self.identifier, self.seq_no)
         elif is_ipv6(self.destination_ip) == 6:
             header = struct.pack("!BBHHH", ICMP_V6_ECHO, 0, checksum, self.identifier, self.seq_no)
+            # header = struct.pack("!2B3H", ICMP_V6_ECHO, 0, checksum, self.identifier, self.seq_no)
         packet = header + data
         send_time = timer()
         try:
-            icmp_socket.sendto(packet, (self.destination_ip, 0))
+            # icmp_socket.sendto(packet, (self.destination_ip, 0))
+            icmp_socket.sendto(packet, ((socket.getaddrinfo(host=self.destination_ip,port=None,family=self.family,type=socket.SOCK_RAW)[0][4])))
         except socket.error as err:
             print("Socket Error2: %s", err)
             icmp_socket.close()
@@ -433,7 +436,6 @@ class Traceroute:
             icmp_header = self.header_to_dict(icmp_keys, packet_data[20:28], "!BBHHH")
             ip_keys = ['VersionIHL', 'Type_of_Service', 'Total_Length', 'Identification', 'Flags_FragOffset', 'TTL', 'Protocol', 'Header_Checksum', 'Source_IP', 'Destination_IP']
             ip_header = self.header_to_dict(ip_keys, packet_data[:20], "!BBHHHBBHII")
-            # print(ip_header)
             # print ("Source_IP1", ip_header['Source_IP'])
             return receive_time, icmp_header, ip_header
 

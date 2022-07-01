@@ -16,23 +16,27 @@ ICMP_V6_ECHO = 128
 ICMP_ECHO_REPLY = 0
 ICMP_V6_ECHO_REPLY = 129
 ICMP_TIME_EXCEEDED = 11
-MIN_SLEEP = 1000
+# MIN_SLEEP = 1000
 
 # Windows IPv6 compatibility
 # if PLATFORM_WINDOWS:
-if platform.system() == 'Windows':
-    socket.IPPROTO_IPV6 = 41
-    socket.IPPROTO_ICMPV6 = 58
+# if platform.system() == 'Windows':
+    # socket.IPPROTO_IPV6 = 41
+    # socket.IPPROTO_ICMPV6 = 58
 
 ip2location_result_fields = ['country_short', 'country_long', 'region', 'city', 'isp', 'latitude', 'longitude', 'domain', 'zipcode', 'timezone', 'netspeed', 'idd_code', 'area_code', 'weather_code', 'weather_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', ]
 ip2location_outputs_reference = ['country_code', 'country_name', 'region_name', 'city_name', 'isp', 'latitude', 'longitude', 'domain', 'zip_code', 'time_zone', 'net_speed', 'idd_code', 'area_code', 'weather_station_code', 'weather_station_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', ]
 
-# Define BIN database default path
 if platform.system() == 'Windows':
+    # Windows IPv6 compatibility
+    socket.IPPROTO_IPV6 = 41
+    socket.IPPROTO_ICMPV6 = 58
+    MIN_SLEEP = 500
+    # Define BIN database default path
     default_path = os.path.expanduser('~') + os.sep + "Documents" + os.sep
-# elif platform.system() === 'Linux ':
-# elif platform.system() == 'Darwin':
 else:
+    MIN_SLEEP = 100
+    # Define BIN database default path
     default_path = '/usr/local/share/ip2location/'
     # default_path = '/usr/share/ip2location/'
 
@@ -54,7 +58,6 @@ if sys.platform.startswith('win32'):
         timer = time.clock
 else:
     timer = time.time
-# timer = time.time
 
 def calculate_checksum(packet):
     countTo = (len(packet) // 2) * 2
@@ -154,8 +157,8 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2\n"
-"Copyright (c) 2021 IP2Location.com [MIT License]\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3\n"
+"Copyright (c) 2022 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
 def traceroute(destination_server, database, ttl, output, all):
@@ -176,7 +179,8 @@ class Traceroute:
 
         self.count_of_packets = 1
         self.packet_size = 80
-        self.timeout = 1000
+        # self.timeout = 1000
+        self.timeout = 500
         self.ttl = 1
 
         if (destination_server is None):
@@ -229,10 +233,9 @@ class Traceroute:
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.2\n"
-"Copyright (c) 2021 IP2Location.com [MIT License]\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3\n"
+"Copyright (c) 2022 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
-        # print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
         if self.destination_domain_name is not None:
             print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
         else:
@@ -254,7 +257,9 @@ class Traceroute:
     # def print_trace(self, delay, ip_header):
     def print_trace(self, delays, ip_header):
         total_delays = 0
-        ip = socket.inet_ntoa(struct.pack('!I', ip_header['Source_IP']))
+        # ip = socket.inet_ntoa(struct.pack('!I', ip_header['Source_IP']))
+        ip = socket.inet_ntoa(struct.pack('!I', ip_header['Destination_IP']))
+        # print(ip_header['Source_IP'])
         try:
             sender_hostname = socket.gethostbyaddr(ip)[0]
         except socket.herror:
@@ -296,15 +301,11 @@ class Traceroute:
                 record_dict = {}
                 for attr, value in record.__dict__.items():
                     record_dict[attr] = value
-                # print(record_dict["region"])
                 if (self.output is not None):
                     for i in self.output:
                         if (i in ip2location_outputs_reference) and (ip2location_result_fields[ip2location_outputs_reference.index(i)] in record_dict) and (record_dict[ip2location_result_fields[ip2location_outputs_reference.index(i)]] is not None):
                             display_result = display_result + '"' + str(record_dict[ip2location_result_fields[ip2location_outputs_reference.index(i)]]) + '",'
                 else:
-                    # for i in range(0,len(ip2location_result_fields)):
-                        # if (ip2location_result_fields[i] in record_dict) and (record_dict[ip2location_result_fields[i]] is not None):
-                            # display_result = display_result + '"' + str(record_dict[ip2location_result_fields[i]]) + '",'
                     if (self.all is False) :
                         if "region" in record_dict:
                             display_result = display_result + '"' + str(record_dict["country_short"]) + '","' + str(record_dict["region"]) + '","' + str(record_dict["city"]) + '"'
@@ -325,8 +326,6 @@ class Traceroute:
             print()
             self.prev_sender_hostname = ""
             average_delays = total_delays / len(delays)
-            # if MIN_SLEEP > delay:
-                # time.sleep((MIN_SLEEP - delay) / 1000)
             if MIN_SLEEP > average_delays:
                 time.sleep((MIN_SLEEP - average_delays) / 1000)
 
@@ -351,32 +350,11 @@ class Traceroute:
                     break
 
     def tracer(self):
-        # try:
-            # if is_ipv4(self.destination_ip) == 4:
-                # icmp_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
-                # icmp_socket.setsockopt(socket.IPPROTO_IP, socket.IP_TTL, self.ttl)
-            # elif is_ipv6(self.destination_ip) == 6:
-                # icmp_socket = socket.socket(socket.AF_INET6, socket.SOCK_RAW, socket.IPPROTO_ICMPV6)
-                # icmp_socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_UNICAST_HOPS, self.ttl)
-        # except socket.error as err:
-            # if err.errno == 1:
-                # print("Operation not permitted: ICMP messages can only be sent from a process running as root")
-            # else:
-                # print("Socket Error1: {}".format(err))
-            # sys.exit()
         self.seq_no += 1
         if self.ttl == 1 and self.seq_no == 1:
             self.print_start()
-        # sent_time = self.send_icmp_echo(icmp_socket)
-        # if sent_time is None:
-            # return
-        # receive_time, icmp_header, ip_header = self.receive_icmp_reply(icmp_socket)
-        # icmp_socket.close()
-        # if receive_time:
-            # delay = (receive_time - sent_time) * 1000.0
-            # self.print_trace(delay, ip_header)
+
         delays = []
-        # print(icmp_socket)
         for i in range (0, 3):
             try:
                 if is_ipv4(self.destination_ip) == 4:
@@ -395,16 +373,11 @@ class Traceroute:
             if sent_time is None:
                 return
             receive_time, icmp_header, ip_header = self.receive_icmp_reply(icmp_socket)
-            # print ("Source_IP", ip_header['Source_IP'])
             icmp_socket.close()
             if receive_time:
                 delay = (receive_time - sent_time) * 1000.0
-                # print(delay)
                 delays.append(delay)
-            # time.sleep(0.1)
-            # time.sleep(0.01)
             time.sleep(0.005)
-        # if len(delays) > 0:
         if len(delays) > 0 and ip_header is not None:
             self.print_trace(delays, ip_header)
         else:
@@ -449,12 +422,9 @@ class Traceroute:
     def receive_icmp_reply(self, icmp_socket):
         timeout = self.timeout / 1000
         time_limit = timer() + timeout
-        # print ("timeout", timeout)
-        # print ("time_limit", time_limit)
         while True:
             inputReady, _, _ = select.select([icmp_socket], [], [], timeout)
             receive_time = timer()
-            # print ("receive_time", receive_time)
             if receive_time > time_limit:  # timeout
                 # self.print_timeout()
                 return None, None, None
@@ -463,6 +433,7 @@ class Traceroute:
             icmp_header = self.header_to_dict(icmp_keys, packet_data[20:28], "!BBHHH")
             ip_keys = ['VersionIHL', 'Type_of_Service', 'Total_Length', 'Identification', 'Flags_FragOffset', 'TTL', 'Protocol', 'Header_Checksum', 'Source_IP', 'Destination_IP']
             ip_header = self.header_to_dict(ip_keys, packet_data[:20], "!BBHHHBBHII")
+            # print(ip_header)
             # print ("Source_IP1", ip_header['Source_IP'])
             return receive_time, icmp_header, ip_header
 

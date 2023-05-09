@@ -18,8 +18,8 @@ ICMP_ECHO_REPLY = 0
 ICMP_V6_ECHO_REPLY = 129
 ICMP_TIME_EXCEEDED = 11
 
-ip2location_result_fields = ['country_short', 'country_long', 'region', 'city', 'isp', 'latitude', 'longitude', 'domain', 'zipcode', 'timezone', 'netspeed', 'idd_code', 'area_code', 'weather_code', 'weather_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', ]
-ip2location_outputs_reference = ['country_code', 'country_name', 'region_name', 'city_name', 'isp', 'latitude', 'longitude', 'domain', 'zip_code', 'time_zone', 'net_speed', 'idd_code', 'area_code', 'weather_station_code', 'weather_station_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', ]
+ip2location_result_fields = ['country_short', 'country_long', 'region', 'city', 'isp', 'latitude', 'longitude', 'domain', 'zipcode', 'timezone', 'netspeed', 'idd_code', 'area_code', 'weather_code', 'weather_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', 'district', 'asn', 'as_name', ]
+ip2location_outputs_reference = ['country_code', 'country_name', 'region_name', 'city_name', 'isp', 'latitude', 'longitude', 'domain', 'zip_code', 'time_zone', 'net_speed', 'idd_code', 'area_code', 'weather_station_code', 'weather_station_name', 'mcc', 'mnc', 'mobile_brand', 'elevation', 'usage_type', 'address_type', 'category', 'district', 'asn', 'as_name', ]
 
 if platform.system() == 'Windows':
     # Windows IPv6 compatibility
@@ -138,7 +138,7 @@ def print_usage():
 "\n"
 "  -o, --output\n"
 "  Set the desired IP2Location BIN database columns to output with.\n"
-"  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type, address_type, category.\n"
+"  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type, address_type, category, district, asn, as_name.\n"
 "\n"
 "  -a, --all\n"
 "Print all the column(s) available based on the BIN file used.\n"
@@ -151,8 +151,8 @@ def print_usage():
 
 def print_version():
     print(
-"IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3\n"
-"Copyright (c) 2022 IP2Location.com [MIT License]\n"
+"IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0\n"
+"Copyright (c) 2023 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
 def traceroute(destination_server, database, ttl, output, all):
@@ -224,11 +224,11 @@ class Traceroute:
         if (self.output is not None):
             for i in self.output:
                 if i not in ip2location_outputs_reference:
-                    print("The column name is invalid. Please get a list of valid column names at https://ip2location.com/database/db24-ip-country-region-city-latitude-longitude-zipcode-timezone-isp-domain-netspeed-areacode-weather-mobile-elevation-usagetype.")
+                    print("The column name is invalid. Please get a list of valid column names at https://www.ip2location.com/database/db26-ip-country-region-city-latitude-longitude-zipcode-timezone-isp-domain-netspeed-areacode-weather-mobile-elevation-usagetype-addresstype-category-district-asn.")
                     sys.exit()
 
     def print_start(self):
-        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3\n"
+        print("IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0\n"
 "Copyright (c) 2022 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
         if self.destination_domain_name is not None:

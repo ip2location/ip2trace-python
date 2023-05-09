@@ -1,6 +1,6 @@
 # IP2Trace Python
 
-IP2Trace Python is a Python tool allowing user to get IP address information such as country, region, city, latitude, longitude, zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, usage type from traceroute probes IP address.
+IP2Trace Python is a Python tool allowing user to get IP address information such as country, region, city, latitude, longitude, zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, usage type, address type, IAB category, district, autonomous system number (ASN) and autonomous system (AS) from traceroute probes IP address.
 
 *Note: This tool requires Python 2.7, or Python 3.5 or later.*
 
@@ -29,7 +29,7 @@ Usage: ip2tracepy -p [IP ADDRESS/HOSTNAME] -d [IP2LOCATION BIN DATA PATH] [OPTIO
 
   -o, --output
   Set the desired IP2Location BIN database columns to output with.
-  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type, address_type, category.
+  Available columns are: country_code, country_name, region_name, city_name, isp, latitude, longitude, domain, zip_code, time_zone, net_speed, idd_code, area_code, weather_station_code, weather_station_name, mcc, mnc, mobile_brand, elevation, usage_type, address_type, category, district, asn, as_name.
   
   -a, --all
   Print all the column(s) available based on the BIN file used.
@@ -52,8 +52,8 @@ ip2tracepy 8.8.8.8 -d /usr/local/share/ip2location/DB3.BIN -a
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3
-Copyright (c) 2021 IP2Location.com [MIT License]
+IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0
+Copyright (c) 2023 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
 Traceroute to dns.google ( 8.8.8.8 )
@@ -78,8 +78,8 @@ ip2tracepy google.com -d /usr/local/share/ip2location/DB3.BIN -a
 Example output:
 
 ```bash
-IP2Location Geolocation Traceroute (ip2trace) Version 3.1.3
-Copyright (c) 2021 IP2Location.com [MIT License]
+IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0
+Copyright (c) 2023 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
 Traceroute to dns.google ( 8.8.8.8 )

@@ -53,7 +53,7 @@ Example output:
 
 ```bash
 IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0
-Copyright (c) 2023 IP2Location.com [MIT License]
+Copyright (c) 2021 - 2024 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
 Traceroute to dns.google ( 8.8.8.8 )
@@ -79,7 +79,7 @@ Example output:
 
 ```bash
 IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0
-Copyright (c) 2023 IP2Location.com [MIT License]
+Copyright (c) 2021 - 2024 IP2Location.com [MIT License]
 https://www.ip2location.com/free/traceroute-application
 
 Traceroute to dns.google ( 8.8.8.8 )

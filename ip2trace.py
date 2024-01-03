@@ -152,7 +152,7 @@ def print_usage():
 def print_version():
     print(
 "IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0\n"
-"Copyright (c) 2023 IP2Location.com [MIT License]\n"
+"Copyright (c) 2021 - 2024 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n")
 
 def traceroute(destination_server, database, ttl, output, all):
@@ -229,7 +229,7 @@ class Traceroute:
 
     def print_start(self):
         print("IP2Location Geolocation Traceroute (ip2trace) Version 3.2.0\n"
-"Copyright (c) 2022 IP2Location.com [MIT License]\n"
+"Copyright (c) 2021 - 2024 IP2Location.com [MIT License]\n"
 "https://www.ip2location.com/free/traceroute-application\n\n")
         if self.destination_domain_name is not None:
             print("Traceroute to", self.destination_domain_name[0], "(", self.destination_ip, ")\n\n", end="")
